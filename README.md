@@ -1,2 +1,2 @@
 # maratona
-Códigos de problemas de martona
+Códigos de problemas da maratona
