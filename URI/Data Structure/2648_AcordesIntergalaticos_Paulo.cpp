@@ -1,24 +1,9 @@
 #include <bits/stdc++.h>
-#define MAXN 10100
-#define INF 0x3f3f3f3f
 
 using namespace std;
 
 struct No{
-	int vetor[9];
-	
-	No(){
-		vetor[0] = 0;
-		vetor[1] = 0;
-		vetor[2] = 0;
-		vetor[3] = 0;
-		vetor[4] = 0;
-		vetor[5] = 0;
-		vetor[6] = 0;
-		vetor[7] = 0;
-		vetor[8] = 0;
-	}
-
+	int vetor[9]={};
 };
 
 const No neutral; //comp(x, neutral) = x
@@ -42,16 +27,18 @@ private:
 #define left(p) (p << 1)
 #define right(p) ((p << 1) + 1)
 
-	void build(int p, int l, int r, int* A) {
-		if (l == r) { st[p].vetor[1] = A[l]; return; }
-		int m = (l + r) / 2;
-		build(left(p), l, m, A);
-		build(right(p), m+1, r, A);
+	void build(int p, int l, int r) {
+		if (l == r) { st[p].vetor[1] = 1; return; }
+		int m = (l + r)>>1;
+		build(left(p), l, m);
+		build(right(p), m+1, r);
 		st[p] = comp(st[left(p)], st[right(p)]);
 	}
 	
 	void push(int p, int l, int r) {
-		
+		if(!lazy[p])
+			return;
+			
 		No novo;
 		for(int i=0; i<9; i++){
 			novo.vetor[(i+lazy[p])%9] = st[p].vetor[i];
@@ -75,8 +62,9 @@ private:
 		else if (l >= a && r <= b) {
 			lazy[p] = k; push(p, l, r); return;
 		}		
-		update(left(p), l, (l + r) / 2, a, b, k);
-		update(right(p), (l + r) / 2 + 1, r, a, b, k);
+		
+		update(left(p), l, (l + r)>>1, a, b, k);
+		update(right(p), ((l + r)>>1) + 1, r, a, b, k);
 		st[p] = comp(st[left(p)], st[right(p)]);
 	}
 	
@@ -84,36 +72,33 @@ private:
 		push(p, l, r);
 		if (a > r || b < l) return neutral;
 		if (l >= a && r <= b) return st[p];
-		int m = (l + r) / 2;
+		int m = (l + r)>>1;
 		No p1 = query(left(p), l, m, a, b);
 		No p2 = query(right(p), m+1, r, a, b);
 		return comp(p1, p2);
 	}
 	
 public:
-	SegmentTree(int* st, int* en) {
-		size = (int)(en - st);
-		this->st.assign(4 * size, neutral);
+	SegmentTree(int t) {
+		size = t;
+		st.assign(4 * size, neutral);
 		lazy.assign(4 * size, 0);
-		build(1, 0, size - 1, st);
+		build(1, 0, size - 1);
 	}
 	
 	No query(int a, int b) { return query(1, 0, size - 1, a, b); }
 	void update(int a, int b, int k) { update(1, 0, size - 1, a, b, k); }
 };
 
-int init[100100];
 int n, q;
 
 int main(){
     cin.tie(0);
     cin.sync_with_stdio(0);
+    
     cin >> n >> q;
     
-    for(int i=0; i<n; i++)
-		init[i] = 1;
-    
-    SegmentTree st(init, init + n); 
+    SegmentTree st(n); 
     
     for(int i=0; i<q; i++){
 		int a, b;
