@@ -1,26 +1,29 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 
 using namespace std;
+//using namespace __gnu_pbds;
 
-typedef long long   ll;
-typedef pair<int,int> pii;
-typedef vector<int> vi;
-typedef vector<ll> vll;
-typedef vector<pii> vpi;
+//typedef tree<long int, null_type, less<long int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
+/*
+	o.find_by_order(index)
+	o.order_of_key(value)	
+	o.find(value)
+*/
+
+#define INF 0x3f3f3f3f
+#define INF64 0x3f3f3f3f3f3f3f3f
+
+#define MP make_pair
+#define PB push_back
 #define F first
 #define S second
-#define PB push_back
-#define MP make_pair
-#define REP(i,a,b) for(int i = a; i < (int)(b); i++)
-#define INF 0x3f3f3f3f
-#define INFLL 0x3f3f3f3f3f3f3f3f
-#define all(x) x.begin(),x.end()
-#define MOD 1000000007
-#define endl '\n'
 
-#define mdc(a, b) (__gcd((a), (b)))
-#define mmc(a, b) (((a)*(b))/__gcd((a), (b)))
+#define MAXN 1000100
+#define MAXM 
+#define endl '\n'
 
 #define cinc(a) scanf(" %c", &a)
 #define cinll(a) scanf("%lld", &a)
@@ -43,10 +46,30 @@ typedef vector<pii> vpi;
 #define cout4i(a, b, c, d) printf("%ld %ld %ld %ld\n", a, b, c, d)
 #define cout5i(a, b, c, d, e) printf("%ld %ld %ld %ld %ld\n", a, b, c, d, e)
 
-int main() {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
+#define mdc(a, b) (__gcd((a), (b)))
+#define mmc(a, b) (((a)*(b))/__gcd((a), (b)))
+
+typedef long long int ll;
+typedef pair<long int, long int> pii;
+
+vector<int> vet[MAXN];
+
+int main(){	
+	long n, raiz;
+	
+	cini(n);
+	raiz = sqrt(n);
+	
+	for(int i=1; i<=n; i++){
+		vet[(i-1)/raiz].PB(i);
+	}
+	
+	for(int i=(n-1)/raiz; i>=0; i--){
+		for(int v: vet[i])
+			cout << v << " ";
+	}
+	
+	cout << endl;
 	
 	return 0;
 }
-
