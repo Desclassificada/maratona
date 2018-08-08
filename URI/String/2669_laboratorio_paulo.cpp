@@ -5,7 +5,25 @@
 using namespace std;
 
 const double PI = acos(0) * 2;
-typedef complex<double> base;
+
+struct complex_t{
+  double a {0.0}, b {0.0};
+  complex_t(){}
+  complex_t(double na):a{na}{}
+  complex_t(double na, double nb) : a{na}, b{nb}{}
+  const complex_t operator+(const complex_t &c) const {
+    return complex_t(a + c.a, b + c.b);
+  }
+  const complex_t operator-(const complex_t &c) const {
+    return complex_t(a - c.a, b - c.b);
+  }
+  const complex_t operator*(const complex_t &c) const {
+    return complex_t(a*c.a - b*c.b, a*c.b + b*c.a);
+  }
+};
+
+
+typedef complex_t base;
 
 base a[MAXN], b[MAXN];
 
@@ -29,13 +47,15 @@ void fft (base a[], int n, bool invert) {
 				base u = a[i+j],  v = a[i+j+len/2] * w;
 				a[i+j] = u + v;
 				a[i+j+len/2] = u - v;
-				w *= wlen;
+				w = w * wlen;
 			}
 		}
 	}
 	if (invert)
-		for (int i=0; i<n; ++i)
-			a[i] /= n;
+		for (int i=0; i<n; ++i){
+			a[i].a = a[i].a / n;
+			a[i].b = a[i].b / n;
+		}
 } 
 
 void multiply (size_t size) {
@@ -46,7 +66,7 @@ void multiply (size_t size) {
 	fft (a, n, false),  fft (b, n, false);
 	
 	for (size_t i=0; i<n; ++i)
-		a[i] *= b[i];
+		a[i] = a[i] * b[i];
 		
 	fft (a, n, true);
  
@@ -87,7 +107,7 @@ int main(){
 	long int cont = 0;
 	
 	for(int i=soma+1; i <= 2*soma; i++){
-		if( int(a[i].real() + 0.5) > 0)
+		if( int(a[i].a + 0.5) > 0)
 			cont++;
 	}
 	
