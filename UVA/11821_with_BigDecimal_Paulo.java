@@ -21,6 +21,7 @@ public class Main{
 												
 				ans = ans.add(new BigDecimal(current));
 			}
+			
 			String s_ans = ans.toString();
 			int size = s_ans.length();
 			
@@ -30,8 +31,7 @@ public class Main{
 			if((s_ans.charAt(size-1) == '.')){
 				size--;
 			}
-			
-			
+						
 			System.out.println(s_ans.substring(0, size));				
 		}
 
